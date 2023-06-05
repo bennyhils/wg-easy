@@ -146,6 +146,7 @@ AllowedIPs = ${client.address}/32`;
       latestHandshakeAt: null,
       transferRx: null,
       transferTx: null,
+      paidBefore: new Date(client.paidBefore),
     }));
 
     // Loop WireGuard status
@@ -226,6 +227,10 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
 
     const config = await this.getConfig();
 
+    if(Object.values(config.clients).find(client => {return client.name === name})) {
+      throw new Error('Login is not unique. Change login')
+    }
+
     const privateKey = await Util.exec('wg genkey');
     const publicKey = await Util.exec(`echo ${privateKey} | wg pubkey`);
     const preSharedKey = await Util.exec('wg genpsk');
@@ -258,6 +263,8 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
 
       createdAt: new Date(),
       updatedAt: new Date(),
+
+      paidBefore: new Date(2099, 0, 1),
 
       enabled: true,
     };
@@ -297,9 +304,25 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
   }
 
   async updateClientName({ clientId, name }) {
+
+    const config = await this.getConfig();
+
+    if(Object.values(config.clients).find(client => {return client.name === name})) {
+      throw new Error('Login is not unique. Change login')
+    }
+
     const client = await this.getClient({ clientId });
 
     client.name = name;
+    client.updatedAt = new Date();
+
+    await this.saveConfig();
+  }
+
+  async updateClientPaidBefore({ clientId, paidBefore }) {
+    const client = await this.getClient({ clientId });
+
+    client.paidBefore = paidBefore;
     client.updatedAt = new Date();
 
     await this.saveConfig();

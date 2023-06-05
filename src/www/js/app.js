@@ -38,6 +38,8 @@ new Vue({
     clientCreateName: '',
     clientEditName: null,
     clientEditNameId: null,
+    clientEditPaidBefore: null,
+    clientEditPaidBeforeId: null,
     clientEditAddress: null,
     clientEditAddressId: null,
     qrcode: null,
@@ -231,6 +233,12 @@ new Vue({
     },
     updateClientName(client, name) {
       this.api.updateClientName({ clientId: client.id, name })
+        .catch(err => alert(err.message || err.toString()))
+        .finally(() => this.refresh().catch(console.error));
+    },
+    updateClientPaidBefore(client, paidBefore) {
+      // todo: check date and fuck off when invalid
+      this.api.updateClientPaidBefore({ clientId: client.id, paidBefore })
         .catch(err => alert(err.message || err.toString()))
         .finally(() => this.refresh().catch(console.error));
     },

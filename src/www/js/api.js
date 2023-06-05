@@ -109,6 +109,14 @@ class API {
     });
   }
 
+  async updateClientPaidBefore({ clientId, paidBefore }) {
+    return this.call({
+      method: 'put',
+      path: `/wireguard/client/${clientId}/paid/`,
+      body: { paidBefore },
+    });
+  }
+
   async updateClientAddress({ clientId, address }) {
     return this.call({
       method: 'put',

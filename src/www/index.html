@@ -57,7 +57,7 @@
         <div class="shadow-md rounded-lg bg-white overflow-hidden">
           <div class="flex flex-row flex-auto items-center p-3 px-5 border border-b-2 border-gray-100">
             <div class="flex-grow">
-              <p class="text-2xl font-medium">Clients</p>
+              <p class="text-2xl font-medium">Clients bennyhils.inc</p>
             </div>
             <div class="flex-shrink-0">
               <button @click="clientCreate = true; clientCreateName = '';"
@@ -146,10 +146,11 @@
                     <input v-show="clientEditNameId === client.id" v-model="clientEditName"
                       v-on:keyup.enter="updateClientName(client, clientEditName); clientEditName = null; clientEditNameId = null;"
                       v-on:keyup.escape="clientEditName = null; clientEditNameId = null;"
+                      @blur="clientEditName = null; clientEditNameId = null;"
                       :ref="'client-' + client.id + '-name'"
                       class="rounded px-1 border-2 border-gray-100 focus:border-gray-200 outline-none w-30" />
                     <span v-show="clientEditNameId !== client.id"
-                      class="inline-block border-t-2 border-b-2 border-transparent">{{client.name}}</span>
+                      class="inline-block border-t-2 border-b-2 border-transparent">{{client.name}}, {{client.id}}</span>
 
                     <!-- Edit -->
                     <span v-show="clientEditNameId !== client.id"
@@ -160,6 +161,32 @@
                         stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                      </svg>
+                    </span>
+                  </div>
+
+                  <!-- Paid Before -->
+                  <div class="text-gray-700 group" :title="'Paid before'">
+
+                    <!-- Show -->
+                    <input v-show="clientEditPaidBeforeId === client.id" v-model="clientEditPaidBefore"
+                           v-on:keyup.enter="updateClientPaidBefore(client, clientEditPaidBefore); clientEditPaidBefore = null; clientEditPaidBeforeId = null;"
+                           v-on:keyup.escape="clientEditPaidBefore = null; clientEditPaidBeforeId = null;"
+                           @blur="clientEditPaidBefore = null; clientEditPaidBeforeId = null;"
+                           :ref="'client-' + client.id + '-date'"
+                           class="rounded px-1 border-2 border-gray-100 focus:border-gray-200 outline-none w-30" />
+                    <span v-show="clientEditPaidBeforeId !== client.id"
+                          class="inline-block border-t-2 border-b-2 border-transparent">Оплатил до: {{dateTime(new Date(client.paidBefore))}}</span>
+
+                    <!-- Edit -->
+                    <span v-show="clientEditPaidBeforeId !== client.id"
+                          @click="clientEditPaidBefore = client.paidBefore;  clientEditPaidBeforeId = client.id; setTimeout(() => $refs['client-' + client.id + '-date'][0].select(), 1);"
+                          class="cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity">
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           class="h-4 w-4 inline align-middle opacity-25 hover:opacity-100" fill="none" viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                       </svg>
                     </span>
                   </div>
@@ -190,6 +217,29 @@
                             d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </span>
+                    </span>
+
+                    <!-- Transfer TX -->
+                    <span>
+                      <svg class="align-middle h-3 inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                           fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M16.707 10.293a1 1 0 010 1.414l-6 6a1 1 0 01-1.414 0l-6-6a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l4.293-4.293a1 1 0 011.414 0z"
+                              clip-rule="evenodd" />
+                      </svg>
+                      {{client.transferTx | bytes}}
+                    </span>
+
+                    <!-- Transfer RX -->
+                    <span>
+                      ·
+                      <svg class="align-middle h-3 inline" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                           fill="currentColor">
+                        <path fill-rule="evenodd"
+                              d="M3.293 9.707a1 1 0 010-1.414l6-6a1 1 0 011.414 0l6 6a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L4.707 9.707a1 1 0 01-1.414 0z"
+                              clip-rule="evenodd" />
+                      </svg>
+                      {{client.transferRx | bytes}}
                     </span>
 
                     <!-- Transfer TX -->
