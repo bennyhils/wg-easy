@@ -135,6 +135,10 @@ AllowedIPs = ${client.address}/32`;
     const clients = Object.entries(config.clients).map(([clientId, client]) => ({
       id: clientId,
       name: client.name,
+      tgLogin: client.tgLogin,
+      tgId: client.tgId,
+      tgFirst: client.tgFirst,
+      tgLast: client.tgLast,
       enabled: client.enabled,
       address: client.address,
       publicKey: client.publicKey,
@@ -220,7 +224,7 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
     });
   }
 
-  async createClient({ name }) {
+  async createClient({ name, tgLogin, tgId, tgFirst, tgLast }) {
     if (!name) {
       throw new Error('Missing: Name');
     }
@@ -254,17 +258,22 @@ Endpoint = ${WG_HOST}:${WG_PORT}`;
 
     // Create Client
     const clientId = uuid.v4();
+    var currentDate = new Date();
     const client = {
       name,
+      tgLogin: tgLogin || "createdFromUI",
+      tgId: tgId || "createdFromUI",
+      tgFirst: tgFirst || "createdFromUI",
+      tgLast: tgLast || "createdFromUI",
       address,
       privateKey,
       publicKey,
       preSharedKey,
 
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      createdAt: currentDate,
+      updatedAt: currentDate,
 
-      paidBefore: new Date(2099, 0, 1),
+      paidBefore: currentDate.setDate(currentDate.getDate() + 2),
 
       enabled: true,
     };

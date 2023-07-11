@@ -150,7 +150,7 @@
                       :ref="'client-' + client.id + '-name'"
                       class="rounded px-1 border-2 border-gray-100 focus:border-gray-200 outline-none w-30" />
                     <span v-show="clientEditNameId !== client.id"
-                      class="inline-block border-t-2 border-b-2 border-transparent">{{client.name}}, {{client.id}}</span>
+                      class="inline-block border-t-2 border-b-2 border-transparent">{{client.name}}, {{client.tgLogin}}, {{client.tgFirst}} {{client.tgLast}}</span>
 
                     <!-- Edit -->
                     <span v-show="clientEditNameId !== client.id"
